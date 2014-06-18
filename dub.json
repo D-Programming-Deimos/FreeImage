@@ -1,0 +1,9 @@
+{
+    "name": "FreeImage",
+    "description": "Binding for the FreeImage graphics library.",
+    "homepage": "http://freeimage.sourceforge.net/",
+    "license": "GPL",
+    "importPaths": ["."],
+    "targetType": "sourceLibrary",
+    "libs": ["freeimage"],
+}

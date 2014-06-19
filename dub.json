@@ -1,5 +1,5 @@
 {
-    "name": "FreeImage",
+    "name": "freeimage",
     "description": "Binding for the FreeImage graphics library.",
     "homepage": "http://freeimage.sourceforge.net/",
     "license": "GPL",

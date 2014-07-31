@@ -630,7 +630,7 @@ alias FI_PageCapabilityProc = DLL_CALLCONV!(int function(FreeImageIO *io, fi_han
 alias FI_LoadProc = DLL_CALLCONV!(FIBITMAP *function(FreeImageIO *io, fi_handle handle, int page, int flags, void *data));
 alias FI_SaveProc = DLL_CALLCONV!(BOOL function(FreeImageIO *io, FIBITMAP *dib, fi_handle handle, int page, int flags, void *data));
 alias FI_ValidateProc = DLL_CALLCONV!(BOOL function(FreeImageIO *io, fi_handle handle));
-alias FI_MimeProc = DLL_CALLCONV!(const char *function());
+alias FI_MimeProc = DLL_CALLCONV!(const(char)* function());
 alias FI_SupportsExportBPPProc = DLL_CALLCONV!(BOOL function(int bpp));
 alias FI_SupportsExportTypeProc = DLL_CALLCONV!(BOOL function(FREE_IMAGE_TYPE type));
 alias FI_SupportsICCProfilesProc = DLL_CALLCONV!(BOOL function());
@@ -777,17 +777,17 @@ void  FreeImage_DeInitialise();
 
 // Version routines ---------------------------------------------------------
 
-const char * FreeImage_GetVersion();
-const char * FreeImage_GetCopyrightMessage();
+const(char)* FreeImage_GetVersion();
+const(char)* FreeImage_GetCopyrightMessage();
 
 // Message output functions -------------------------------------------------
 
-alias FreeImage_OutputMessageFunction = void  function(FREE_IMAGE_FORMAT fif, const char *msg);
-alias FreeImage_OutputMessageFunctionStdCall = DLL_CALLCONV!(void function(FREE_IMAGE_FORMAT fif, const char *msg));
+alias FreeImage_OutputMessageFunction = void  function(FREE_IMAGE_FORMAT fif, const(char)* msg);
+alias FreeImage_OutputMessageFunctionStdCall = DLL_CALLCONV!(void function(FREE_IMAGE_FORMAT fif, const(char)* msg));
 
 void  FreeImage_SetOutputMessageStdCall(FreeImage_OutputMessageFunctionStdCall omf);
 void  FreeImage_SetOutputMessage(FreeImage_OutputMessageFunction omf);
-void  FreeImage_OutputMessageProc(int fif, const char *fmt, ...);
+void  FreeImage_OutputMessageProc(int fif, const(char)* fmt, ...);
 
 // Allocate / Clone / Unload routines ---------------------------------------
 
@@ -801,11 +801,11 @@ BOOL  FreeImage_HasPixels(FIBITMAP *dib);
 
 // Load / Save routines -----------------------------------------------------
 
-FIBITMAP * FreeImage_Load(FREE_IMAGE_FORMAT fif, const char *filename, int flags = 0);
-FIBITMAP * FreeImage_LoadU(FREE_IMAGE_FORMAT fif, const wchar *filename, int flags = 0);
+FIBITMAP * FreeImage_Load(FREE_IMAGE_FORMAT fif, const(char)* filename, int flags = 0);
+FIBITMAP * FreeImage_LoadU(FREE_IMAGE_FORMAT fif, const(wchar)* filename, int flags = 0);
 FIBITMAP * FreeImage_LoadFromHandle(FREE_IMAGE_FORMAT fif, FreeImageIO *io, fi_handle handle, int flags = 0);
-BOOL  FreeImage_Save(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, const char *filename, int flags = 0);
-BOOL  FreeImage_SaveU(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, const wchar *filename, int flags = 0);
+BOOL  FreeImage_Save(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, const(char)* filename, int flags = 0);
+BOOL  FreeImage_SaveU(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, const(wchar)* filename, int flags = 0);
 BOOL  FreeImage_SaveToHandle(FREE_IMAGE_FORMAT fif, FIBITMAP *dib, FreeImageIO *io, fi_handle handle, int flags = 0);
 
 // Memory I/O stream routines -----------------------------------------------
@@ -818,27 +818,27 @@ long  FreeImage_TellMemory(FIMEMORY *stream);
 BOOL  FreeImage_SeekMemory(FIMEMORY *stream, long offset, int origin);
 BOOL  FreeImage_AcquireMemory(FIMEMORY *stream, BYTE **data, DWORD *size_in_bytes);
 uint  FreeImage_ReadMemory(void *buffer, uint size, uint count, FIMEMORY *stream);
-uint  FreeImage_WriteMemory(const void *buffer, uint size, uint count, FIMEMORY *stream);
+uint  FreeImage_WriteMemory(const(void)* buffer, uint size, uint count, FIMEMORY *stream);
 
 FIMULTIBITMAP * FreeImage_LoadMultiBitmapFromMemory(FREE_IMAGE_FORMAT fif, FIMEMORY *stream, int flags = 0);
 BOOL  FreeImage_SaveMultiBitmapToMemory(FREE_IMAGE_FORMAT fif, FIMULTIBITMAP *bitmap, FIMEMORY *stream, int flags);
 
 // Plugin Interface ---------------------------------------------------------
 
-FREE_IMAGE_FORMAT  FreeImage_RegisterLocalPlugin(FI_InitProc proc_address, const char *format = null, const char *description = null, const char *extension = null, const char *regexpr = null);
-FREE_IMAGE_FORMAT  FreeImage_RegisterExternalPlugin(const char *path, const char *format = null, const char *description = null, const char *extension = null, const char *regexpr = null);
+FREE_IMAGE_FORMAT  FreeImage_RegisterLocalPlugin(FI_InitProc proc_address, const(char)* format = null, const(char)* description = null, const(char)* extension = null, const(char)* regexpr = null);
+FREE_IMAGE_FORMAT  FreeImage_RegisterExternalPlugin(const(char)* path, const(char)* format = null, const(char)* description = null, const(char)* extension = null, const(char)* regexpr = null);
 int  FreeImage_GetFIFCount();
 int  FreeImage_SetPluginEnabled(FREE_IMAGE_FORMAT fif, BOOL enable);
 int  FreeImage_IsPluginEnabled(FREE_IMAGE_FORMAT fif);
-FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFormat(const char *format);
-FREE_IMAGE_FORMAT  FreeImage_GetFIFFromMime(const char *mime);
-const char * FreeImage_GetFormatFromFIF(FREE_IMAGE_FORMAT fif);
-const char * FreeImage_GetFIFExtensionList(FREE_IMAGE_FORMAT fif);
-const char * FreeImage_GetFIFDescription(FREE_IMAGE_FORMAT fif);
-const char * FreeImage_GetFIFRegExpr(FREE_IMAGE_FORMAT fif);
-const char * FreeImage_GetFIFMimeType(FREE_IMAGE_FORMAT fif);
-FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFilename(const char *filename);
-FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFilenameU(const wchar *filename);
+FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFormat(const(char)* format);
+FREE_IMAGE_FORMAT  FreeImage_GetFIFFromMime(const(char)* mime);
+const(char)*  FreeImage_GetFormatFromFIF(FREE_IMAGE_FORMAT fif);
+const(char)*  FreeImage_GetFIFExtensionList(FREE_IMAGE_FORMAT fif);
+const(char)*  FreeImage_GetFIFDescription(FREE_IMAGE_FORMAT fif);
+const(char)*  FreeImage_GetFIFRegExpr(FREE_IMAGE_FORMAT fif);
+const(char)*  FreeImage_GetFIFMimeType(FREE_IMAGE_FORMAT fif);
+FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFilename(const(char)* filename);
+FREE_IMAGE_FORMAT  FreeImage_GetFIFFromFilenameU(const(wchar)* filename);
 BOOL  FreeImage_FIFSupportsReading(FREE_IMAGE_FORMAT fif);
 BOOL  FreeImage_FIFSupportsWriting(FREE_IMAGE_FORMAT fif);
 BOOL  FreeImage_FIFSupportsExportBPP(FREE_IMAGE_FORMAT fif, int bpp);
@@ -848,7 +848,7 @@ BOOL  FreeImage_FIFSupportsNoPixels(FREE_IMAGE_FORMAT fif);
 
 // Multipaging interface ----------------------------------------------------
 
-FIMULTIBITMAP *  FreeImage_OpenMultiBitmap(FREE_IMAGE_FORMAT fif, const char *filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory = FALSE, int flags = 0);
+FIMULTIBITMAP *  FreeImage_OpenMultiBitmap(FREE_IMAGE_FORMAT fif, const(char)* filename, BOOL create_new, BOOL read_only, BOOL keep_cache_in_memory = FALSE, int flags = 0);
 FIMULTIBITMAP *  FreeImage_OpenMultiBitmapFromHandle(FREE_IMAGE_FORMAT fif, FreeImageIO *io, fi_handle handle, int flags = 0);
 BOOL  FreeImage_SaveMultiBitmapToHandle(FREE_IMAGE_FORMAT fif, FIMULTIBITMAP *bitmap, FreeImageIO *io, fi_handle handle, int flags = 0);
 BOOL  FreeImage_CloseMultiBitmap(FIMULTIBITMAP *bitmap, int flags = 0);
@@ -863,8 +863,8 @@ BOOL  FreeImage_GetLockedPageNumbers(FIMULTIBITMAP *bitmap, int *pages, int *cou
 
 // Filetype request routines ------------------------------------------------
 
-FREE_IMAGE_FORMAT  FreeImage_GetFileType(const char *filename, int size = 0);
-FREE_IMAGE_FORMAT  FreeImage_GetFileTypeU(const wchar *filename, int size = 0);
+FREE_IMAGE_FORMAT  FreeImage_GetFileType(const(char)* filename, int size = 0);
+FREE_IMAGE_FORMAT  FreeImage_GetFileTypeU(const(wchar)* filename, int size = 0);
 FREE_IMAGE_FORMAT  FreeImage_GetFileTypeFromHandle(FreeImageIO *io, fi_handle handle, int size = 0);
 FREE_IMAGE_FORMAT  FreeImage_GetFileTypeFromMemory(FIMEMORY *stream, int size = 0);
 
@@ -875,8 +875,8 @@ FREE_IMAGE_TYPE  FreeImage_GetImageType(FIBITMAP *dib);
 // FreeImage helper routines ------------------------------------------------
 
 BOOL  FreeImage_IsLittleEndian();
-BOOL  FreeImage_LookupX11Color(const char *szColor, BYTE *nRed, BYTE *nGreen, BYTE *nBlue);
-BOOL  FreeImage_LookupSVGColor(const char *szColor, BYTE *nRed, BYTE *nGreen, BYTE *nBlue);
+BOOL  FreeImage_LookupX11Color(const(char)* szColor, BYTE *nRed, BYTE *nGreen, BYTE *nBlue);
+BOOL  FreeImage_LookupSVGColor(const(char)* szColor, BYTE *nRed, BYTE *nGreen, BYTE *nBlue);
 
 // Pixel access routines ----------------------------------------------------
 
@@ -1024,21 +1024,21 @@ void  FreeImage_DeleteTag(FITAG *tag);
 FITAG * FreeImage_CloneTag(FITAG *tag);
 
 // tag getters and setters
-const char * FreeImage_GetTagKey(FITAG *tag);
-const char * FreeImage_GetTagDescription(FITAG *tag);
+const(char)*  FreeImage_GetTagKey(FITAG *tag);
+const(char)*  FreeImage_GetTagDescription(FITAG *tag);
 WORD  FreeImage_GetTagID(FITAG *tag);
 FREE_IMAGE_MDTYPE  FreeImage_GetTagType(FITAG *tag);
 DWORD  FreeImage_GetTagCount(FITAG *tag);
 DWORD  FreeImage_GetTagLength(FITAG *tag);
-const void * FreeImage_GetTagValue(FITAG *tag);
+const(void)*  FreeImage_GetTagValue(FITAG *tag);
 
-BOOL  FreeImage_SetTagKey(FITAG *tag, const char *key);
-BOOL  FreeImage_SetTagDescription(FITAG *tag, const char *description);
+BOOL  FreeImage_SetTagKey(FITAG *tag, const(char)* key);
+BOOL  FreeImage_SetTagDescription(FITAG *tag, const(char)* description);
 BOOL  FreeImage_SetTagID(FITAG *tag, WORD id);
 BOOL  FreeImage_SetTagType(FITAG *tag, FREE_IMAGE_MDTYPE type);
 BOOL  FreeImage_SetTagCount(FITAG *tag, DWORD count);
 BOOL  FreeImage_SetTagLength(FITAG *tag, DWORD length);
-BOOL  FreeImage_SetTagValue(FITAG *tag, const void *value);
+BOOL  FreeImage_SetTagValue(FITAG *tag, const(void)* value);
 
 // iterator
 FIMETADATA * FreeImage_FindFirstMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, FITAG **tag);
@@ -1046,27 +1046,27 @@ BOOL  FreeImage_FindNextMetadata(FIMETADATA *mdhandle, FITAG **tag);
 void  FreeImage_FindCloseMetadata(FIMETADATA *mdhandle);
 
 // metadata setter and getter
-BOOL  FreeImage_SetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const char *key, FITAG *tag);
-BOOL  FreeImage_GetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const char *key, FITAG **tag);
+BOOL  FreeImage_SetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const(char)* key, FITAG *tag);
+BOOL  FreeImage_GetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP *dib, const(char)* key, FITAG **tag);
 
 // helpers
 uint  FreeImage_GetMetadataCount(FREE_IMAGE_MDMODEL model, FIBITMAP *dib);
 BOOL  FreeImage_CloneMetadata(FIBITMAP *dst, FIBITMAP *src);
 
 // tag to C string conversion
-const char*  FreeImage_TagToString(FREE_IMAGE_MDMODEL model, FITAG *tag, char *Make = NULL);
+const(char)* FreeImage_TagToString(FREE_IMAGE_MDMODEL model, FITAG *tag, char *Make = NULL);
 
 // --------------------------------------------------------------------------
 // JPEG lossless transformation routines
 // --------------------------------------------------------------------------
 
-BOOL  FreeImage_JPEGTransform(const char *src_file, const char *dst_file, FREE_IMAGE_JPEG_OPERATION operation, BOOL perfect = TRUE);
-BOOL  FreeImage_JPEGTransformU(const wchar *src_file, const wchar *dst_file, FREE_IMAGE_JPEG_OPERATION operation, BOOL perfect = TRUE);
-BOOL  FreeImage_JPEGCrop(const char *src_file, const char *dst_file, int left, int top, int right, int bottom);
-BOOL  FreeImage_JPEGCropU(const wchar *src_file, const wchar *dst_file, int left, int top, int right, int bottom);
+BOOL  FreeImage_JPEGTransform(const(char)* src_file, const(char)* dst_file, FREE_IMAGE_JPEG_OPERATION operation, BOOL perfect = TRUE);
+BOOL  FreeImage_JPEGTransformU(const(wchar)* src_file, const(wchar)* dst_file, FREE_IMAGE_JPEG_OPERATION operation, BOOL perfect = TRUE);
+BOOL  FreeImage_JPEGCrop(const(char)* src_file, const(char)* dst_file, int left, int top, int right, int bottom);
+BOOL  FreeImage_JPEGCropU(const(wchar)* src_file, const(wchar)* dst_file, int left, int top, int right, int bottom);
 BOOL  FreeImage_JPEGTransformFromHandle(FreeImageIO* src_io, fi_handle src_handle, FreeImageIO* dst_io, fi_handle dst_handle, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
-BOOL  FreeImage_JPEGTransformCombined(const char *src_file, const char *dst_file, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
-BOOL  FreeImage_JPEGTransformCombinedU(const wchar *src_file, const wchar *dst_file, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
+BOOL  FreeImage_JPEGTransformCombined(const(char)* src_file, const(char)* dst_file, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
+BOOL  FreeImage_JPEGTransformCombinedU(const(wchar)* src_file, const(wchar)* dst_file, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
 BOOL  FreeImage_JPEGTransformCombinedFromMemory(FIMEMORY* src_stream, FIMEMORY* dst_stream, FREE_IMAGE_JPEG_OPERATION operation, int* left, int* top, int* right, int* bottom, BOOL perfect = TRUE);
 
 
@@ -1077,7 +1077,7 @@ BOOL  FreeImage_JPEGTransformCombinedFromMemory(FIMEMORY* src_stream, FIMEMORY* 
 // rotation and flipping
 /// @deprecated see FreeImage_Rotate
 FIBITMAP * FreeImage_RotateClassic(FIBITMAP *dib, double angle);
-FIBITMAP * FreeImage_Rotate(FIBITMAP *dib, double angle, const void *bkcolor = NULL);
+FIBITMAP * FreeImage_Rotate(FIBITMAP *dib, double angle, const(void)* bkcolor = NULL);
 FIBITMAP * FreeImage_RotateEx(FIBITMAP *dib, double angle, double x_shift, double y_shift, double x_origin, double y_origin, BOOL use_mask);
 BOOL  FreeImage_FlipHorizontal(FIBITMAP *dib);
 BOOL  FreeImage_FlipVertical(FIBITMAP *dib);
@@ -1113,10 +1113,10 @@ FIBITMAP * FreeImage_Composite(FIBITMAP *fg, BOOL useFileBkg = FALSE, RGBQUAD *a
 BOOL  FreeImage_PreMultiplyWithAlpha(FIBITMAP *dib);
 
 // background filling routines
-BOOL  FreeImage_FillBackground(FIBITMAP *dib, const void *color, int options = 0);
-FIBITMAP * FreeImage_EnlargeCanvas(FIBITMAP *src, int left, int top, int right, int bottom, const void *color, int options = 0);
-FIBITMAP * FreeImage_AllocateEx(int width, int height, int bpp, const RGBQUAD *color, int options = 0, const RGBQUAD *palette = NULL, uint red_mask = 0, uint green_mask = 0, uint blue_mask = 0);
-FIBITMAP * FreeImage_AllocateExT(FREE_IMAGE_TYPE type, int width, int height, int bpp, const void *color, int options = 0, const RGBQUAD *palette = NULL, uint red_mask = 0, uint green_mask = 0, uint blue_mask = 0);
+BOOL  FreeImage_FillBackground(FIBITMAP *dib, const(void)* color, int options = 0);
+FIBITMAP * FreeImage_EnlargeCanvas(FIBITMAP *src, int left, int top, int right, int bottom, const(void)* color, int options = 0);
+FIBITMAP * FreeImage_AllocateEx(int width, int height, int bpp, const(RGBQUAD)* color, int options = 0, const(RGBQUAD)* palette = NULL, uint red_mask = 0, uint green_mask = 0, uint blue_mask = 0);
+FIBITMAP * FreeImage_AllocateExT(FREE_IMAGE_TYPE type, int width, int height, int bpp, const(void)* color, int options = 0, const(RGBQUAD)* palette = NULL, uint red_mask = 0, uint green_mask = 0, uint blue_mask = 0);
 
 // miscellaneous algorithms
 FIBITMAP * FreeImage_MultigridPoissonSolver(FIBITMAP *Laplacian, int ncycle = 3);
